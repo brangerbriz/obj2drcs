@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title> obj to dracos </title>
+        <style>
+            body,html {
+                margin:0; padding:0;
+                overflow: hidden;
+            }
+            #form {
+                position: absolute;
+                top:15px; left:15px; z-index:9999;
+                color:#fff;
+            }
+            #cl { width: 33px; }
+            pre {
+                position: absolute;
+                color: #fff; z-index:9999;
+                top: 50px; left: 15px;
+            }
+        </style>
+    </head>
+    <body>
+
+        <section id="form">
+            <input type="number" value="10" min="1" max="10" step="1" id="cl">
+            <input type="file" id="uploads" name="uploads" accept=".obj">
+        </section>
+
+        <pre><code></code></pre>
+
+        <script src="js/threejs_libs/three.min.js"></script>
+        <script src="js/threejs_libs/TrackballControls.js"></script>
+        <script src="js/threejs_libs/OBJLoader.js"></script>
+        <script src="js/threejs_libs/OBJExporter.js"></script>
+        <script src="js/draco_libs/DRACOLoader.js"></script>
+        <script src="js/index.js"></script>
+    </body>
+</html>

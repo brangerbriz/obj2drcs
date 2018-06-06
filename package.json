@@ -1,0 +1,19 @@
+{
+  "name": "obj2dracos",
+  "version": "1.0.0",
+  "description": "convert obj with children into individual draco files",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . dev"
+  },
+  "author": "Nick Briz <nickbriz@gmail.com> (http://nickbriz.com)",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "asar": "^0.13.0",
+    "electron": "^1.7.5"
+  },
+  "dependencies": {
+    "ncp": "^2.0.0"
+  }
+}

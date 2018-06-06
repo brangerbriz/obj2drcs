@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title> {{{title}}} </title>
+        <style>
+            html,body {padding:0; margin:0;}
+        </style>
+    </head>
+    <body>
+        <script src="js/three.min.js"></script>
+        <script src="js/TrackballControls.js"></script>
+        <script src="js/DRACOLoader.js"></script>
+        <script>
+
+            const scene = new THREE.Scene()
+            const camera = new THREE.PerspectiveCamera( 75, innerWidth/innerHeight, 0.1, 1000 )
+            const renderer = new THREE.WebGLRenderer()
+            const dracoLoader = new THREE.DRACOLoader()
+            const controls = new THREE.TrackballControls( camera )
+            const raycaster = new THREE.Raycaster()
+            const mouse = new THREE.Vector2()
+            let mesh = new THREE.Object3D()
+            let drcs = [{{{list}}}]
+
+            // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+            // ------------------------- functions -----------------------------
+            // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+            function resize() {
+                camera.aspect = innerWidth / innerHeight
+                camera.updateProjectionMatrix()
+                renderer.setSize(innerWidth, innerHeight)
+            }
+
+            function addShadowedLight(x, y, z, color, intensity) {
+                let directionalLight = new THREE.DirectionalLight(color, intensity)
+                directionalLight.position.set(x, y, z)
+                scene.add(directionalLight)
+            }
+
+            function updateRaycaster(e){
+                mouse.x = ( e.clientX / innerWidth ) * 2 - 1
+                mouse.y = - ( e.clientY / innerHeight ) * 2 + 1
+                raycaster.setFromCamera( mouse, camera )
+                if(typeof mesh !== 'undefined'){
+                    let arr = raycaster.intersectObjects(mesh.children)
+                    updateObjectColors( arr )
+                }
+            }
+
+            function updateObjectColors( arr ){
+                // reset all
+                mesh.children.forEach((c)=>{ c.material.color.r = 0 })
+                // change color of closest intersecting object
+                if( arr.length > 0 ){
+                    arr[0].object.material.color.r = 1
+                }
+            }
+
+            function createScaledMesh(g,m){
+                g.computeBoundingBox()
+                let sx = g.boundingBox.max.x - g.boundingBox.min.x
+                let sy = g.boundingBox.max.y - g.boundingBox.min.y
+                let sz = g.boundingBox.max.z - g.boundingBox.min.z
+                let diagonalSize = Math.sqrt(sx*sx + sy*sy + sz*sz)
+
+                let scale = 1.0 / diagonalSize
+
+                let midX = (g.boundingBox.min.x + g.boundingBox.max.x) / 2
+                let midY = (g.boundingBox.min.y + g.boundingBox.max.y) / 2
+                let midZ = (g.boundingBox.min.z + g.boundingBox.max.z) / 2
+
+                let mesh = new THREE.Mesh(g, m)
+                    mesh.scale.multiplyScalar(scale)
+                    mesh.position.x = -midX * scale
+                    mesh.position.y = -midY * scale
+                    mesh.position.z = -midZ * scale
+                return mesh
+            }
+
+            // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+            // ----------------------- setup + draw ----------------------------
+            // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+            function setup(){
+                renderer.setSize( innerWidth, innerHeight )
+                document.body.appendChild( renderer.domElement )
+                window.addEventListener('resize', resize, false)
+                window.addEventListener('mousemove', updateRaycaster, false)
+
+                scene.add(new THREE.HemisphereLight(0x443333, 0x111122))
+                addShadowedLight(1, 1, 1, 0xffffff, 0.5)
+                addShadowedLight(0.5, 1, -1, 0xffaa00, 0.25)
+
+                camera.position.z = 1
+
+                scene.add( mesh )
+                mesh.scale.x = {{{scaleX}}}
+                mesh.scale.y = {{{scaleY}}}
+                mesh.scale.z = {{{scaleZ}}}
+                mesh.position.x = {{{positionX}}}
+                mesh.position.y = {{{positionY}}}
+                mesh.position.z = {{{positionZ}}}
+
+                /* * * * * * * * * *
+                 *   DRACO STUFF   *
+                 * * * * * * * * * */
+
+                THREE.DRACOLoader.setDecoderPath( 'js/draco_libs/' )
+                // THREE.DRACOLoader.setDecoderConfig({type: 'js' }) // optional
+                drcs.forEach((path)=>{
+                    dracoLoader.load( path, function(geometry) {
+                        // THREE.DRACOLoader.releaseDecoderModule() // optional
+                        let material = new THREE.MeshPhongMaterial({color:0x00ff00})
+                        mesh.add( new THREE.Mesh(geometry,material) )
+                    })
+                })
+
+            }
+
+            function draw() {
+                requestAnimationFrame( draw )
+                controls.update()
+                renderer.render( scene, camera )
+            }
+
+            setup()
+            draw()
+
+        </script>
+    </body>
+</html>
