@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "dev": "electron . dev"
+    "dev": "electron . dev",
+    "test": "electron . test"
   },
   "author": "Nick Briz <nickbriz@gmail.com> (http://nickbriz.com)",
   "license": "GPL-3.0",

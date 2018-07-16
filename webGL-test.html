@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title> obj to dracos </title>
+        <style>
+            body,html {
+                margin:0; padding:0;
+                overflow: hidden;
+            }
+            #info {
+                position: fixed;
+                top:0; left:0;
+                z-index:999999999999;
+            }
+            #info > code {
+                background: #000;
+                color:#fff;
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="info">
+            <code></code>
+            <code></code>
+        </div>
+        <script src="js/threejs_libs/three.min.js"></script>
+        <script>
+            const info = document.querySelector('#info')
+            const scene = new THREE.Scene()
+            const camera = new THREE.PerspectiveCamera( 75, innerWidth/innerHeight, 0.1, 1000 )
+            const renderer = new THREE.WebGLRenderer()
+            let cube
+
+            function gpuInfo(){
+                const canvas = document.createElement('canvas')
+                const gl = canvas.getContext('webgl')
+                let dbgRenNfo = gl.getExtension("WEBGL_debug_renderer_info")
+                let vendor = gl.getParameter(gl.VENDOR)
+                let renderer = gl.getParameter(gl.RENDERER)
+                if(dbgRenNfo){
+                    vendor = gl.getParameter(dbgRenNfo.UNMASKED_VENDOR_WEBGL)
+                    renderer = gl.getParameter(dbgRenNfo.UNMASKED_RENDERER_WEBGL)
+                }
+                return [
+                    `GPU-vendor: ${vendor}`,
+                    `GPU-renderer: ${renderer}`
+                ]
+            }
+
+            function resize() {
+                camera.aspect = innerWidth / innerHeight
+                camera.updateProjectionMatrix()
+                renderer.setSize(innerWidth, innerHeight)
+            }
+
+            function setup(){
+                renderer.setSize( innerWidth, innerHeight )
+                document.body.appendChild( renderer.domElement )
+                window.addEventListener('resize', resize, false)
+
+                camera.position.z = 2
+
+                let geometry = new THREE.BoxGeometry( 1, 1, 1 )
+                let material = new THREE.MeshNormalMaterial()
+                cube = new THREE.Mesh( geometry, material )
+                scene.add( cube )
+
+                draw()
+            }
+
+            function draw() {
+                requestAnimationFrame( draw )
+                cube.rotation.y += 0.01
+                renderer.render( scene, camera )
+            }
+
+            let gpu = gpuInfo()
+            info.children[0].textContent = gpu[0]
+            info.children[1].textContent = gpu[1]
+            setup()
+        </script>
+    </body>
+</html>
