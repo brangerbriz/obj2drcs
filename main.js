@@ -1,7 +1,5 @@
 const electron = require('electron')
-const app = electron.app
-const BrowserWindow = electron.BrowserWindow
-
+const { app, BrowserWindow } = require('electron')
 const dev = (process.argv[2]=="dev"||process.argv[2]=="test") ? true : false
 
 let mainWindow

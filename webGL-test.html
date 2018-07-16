@@ -24,15 +24,12 @@
         <div id="info">
             <code></code>
             <code></code>
+            <code></code>
+            <code></code>
+            <code></code>
         </div>
         <script src="js/threejs_libs/three.min.js"></script>
         <script>
-            const info = document.querySelector('#info')
-            const scene = new THREE.Scene()
-            const camera = new THREE.PerspectiveCamera( 75, innerWidth/innerHeight, 0.1, 1000 )
-            const renderer = new THREE.WebGLRenderer()
-            let cube
-
             function gpuInfo(){
                 const canvas = document.createElement('canvas')
                 const gl = canvas.getContext('webgl')
@@ -48,6 +45,22 @@
                     `GPU-renderer: ${renderer}`
                 ]
             }
+
+            const info = document.querySelector('#info')
+            let gpu = gpuInfo()
+            info.children[0].textContent = gpu[0]
+            info.children[1].textContent = gpu[1]
+
+            if( typeof require == "function"){
+                info.children[2].textContent = `node: ${process.versions.node}`
+                info.children[3].textContent = `chromium: ${process.versions.chrome}`
+                info.children[4].textContent = `electron: ${process.versions.electron}`
+            }
+
+            const scene = new THREE.Scene()
+            const camera = new THREE.PerspectiveCamera( 75, innerWidth/innerHeight, 0.1, 1000 )
+            const renderer = new THREE.WebGLRenderer()
+            let cube
 
             function resize() {
                 camera.aspect = innerWidth / innerHeight
@@ -76,9 +89,6 @@
                 renderer.render( scene, camera )
             }
 
-            let gpu = gpuInfo()
-            info.children[0].textContent = gpu[0]
-            info.children[1].textContent = gpu[1]
             setup()
         </script>
     </body>
