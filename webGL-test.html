@@ -57,39 +57,39 @@
                 info.children[4].textContent = `electron: ${process.versions.electron}`
             }
 
-            // const scene = new THREE.Scene()
-            // const camera = new THREE.PerspectiveCamera( 75, innerWidth/innerHeight, 0.1, 1000 )
-            // const renderer = new THREE.WebGLRenderer()
-            // let cube
-            //
-            // function resize() {
-            //     camera.aspect = innerWidth / innerHeight
-            //     camera.updateProjectionMatrix()
-            //     renderer.setSize(innerWidth, innerHeight)
-            // }
-            //
-            // function setup(){
-            //     renderer.setSize( innerWidth, innerHeight )
-            //     document.body.appendChild( renderer.domElement )
-            //     window.addEventListener('resize', resize, false)
-            //
-            //     camera.position.z = 2
-            //
-            //     let geometry = new THREE.BoxGeometry( 1, 1, 1 )
-            //     let material = new THREE.MeshNormalMaterial()
-            //     cube = new THREE.Mesh( geometry, material )
-            //     scene.add( cube )
-            //
-            //     draw()
-            // }
-            //
-            // function draw() {
-            //     requestAnimationFrame( draw )
-            //     cube.rotation.y += 0.01
-            //     renderer.render( scene, camera )
-            // }
-            //
-            // setup()
+            const scene = new THREE.Scene()
+            const camera = new THREE.PerspectiveCamera( 75, innerWidth/innerHeight, 0.1, 1000 )
+            const renderer = new THREE.WebGLRenderer()
+            let cube
+
+            function resize() {
+                camera.aspect = innerWidth / innerHeight
+                camera.updateProjectionMatrix()
+                renderer.setSize(innerWidth, innerHeight)
+            }
+
+            function setup(){
+                renderer.setSize( innerWidth, innerHeight )
+                document.body.appendChild( renderer.domElement )
+                window.addEventListener('resize', resize, false)
+
+                camera.position.z = 2
+
+                let geometry = new THREE.BoxGeometry( 1, 1, 1 )
+                let material = new THREE.MeshNormalMaterial()
+                cube = new THREE.Mesh( geometry, material )
+                scene.add( cube )
+
+                draw()
+            }
+
+            function draw() {
+                requestAnimationFrame( draw )
+                cube.rotation.y += 0.01
+                renderer.render( scene, camera )
+            }
+
+            setup()
         </script>
     </body>
 </html>
